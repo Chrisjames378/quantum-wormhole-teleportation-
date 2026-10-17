@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { Navigation, ActiveTab } from './components/Navigation';
 import { SimulationTab } from './components/SimulationTab';
 import { Wormhole3D } from './components/Wormhole3D';
@@ -179,6 +180,7 @@ export default function App() {
           </div>
         </div>
       </footer>
+      <Analytics />
     </div>
   );
 }
