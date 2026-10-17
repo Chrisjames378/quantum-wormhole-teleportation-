@@ -1,0 +1,6 @@
+{
+  "name": "Quantum Wormhole Teleportation Playground",
+  "description": "Interactive quantum scrambling and 3D wormhole teleportation testbed comparing Clifford (zero-magic) vs Haar-random circuits.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
