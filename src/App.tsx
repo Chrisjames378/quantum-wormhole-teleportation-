@@ -7,6 +7,7 @@ import { CircuitInspectorTab } from './components/CircuitInspectorTab';
 import { HardwareBlueprintTab } from './components/HardwareBlueprintTab';
 import { AIHybridTab } from './components/AIHybridTab';
 import { TheoryTab } from './components/TheoryTab';
+import { DataCloudTab } from './components/DataCloudTab';
 import { CircuitExportModal } from './components/CircuitExportModal';
 import { QuantumCopilotModal } from './components/QuantumCopilotModal';
 import { ScramblerType, InputStateType, SimulationTrial } from './types/quantum';
@@ -142,6 +143,8 @@ export default function App() {
         )}
 
         {activeTab === 'theory' && <TheoryTab />}
+
+        {activeTab === 'dataCloud' && <DataCloudTab />}
 
       </main>
 
