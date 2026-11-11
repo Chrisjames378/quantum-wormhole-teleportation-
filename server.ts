@@ -82,6 +82,63 @@ Guidelines for your answers:
   }
 });
 
+
+/**
+ * Data Cloud integration diagnostics.
+ * Secrets are read server-side and are never returned to the browser.
+ * Everpure's EDC is not assumed to expose a generic API: this endpoint only
+ * reports whether an endpoint/token pair has been configured.
+ */
+app.get('/api/data-cloud/status', async (_req, res) => {
+  const cloudVaultRaw = process.env.CLOUD_VAULT_URL?.trim();
+  const cloudVaultUrl = cloudVaultRaw?.endsWith('/') ? cloudVaultRaw.slice(0, -1) : cloudVaultRaw;
+  const cloudVaultToken = process.env.CLOUD_VAULT_APP_TOKEN;
+  const everpureUrl = process.env.EVERPURE_API_BASE_URL?.trim();
+  const everpureToken = process.env.EVERPURE_API_TOKEN;
+
+  let cloudVault = {
+    configured: Boolean(cloudVaultUrl),
+    reachable: null as boolean | null,
+    message: cloudVaultUrl ? 'Endpoint configured; checking /api/health.' : 'Set CLOUD_VAULT_URL to enable the optional Cloud Vault health probe.',
+    checkedAt: null as string | null
+  };
+
+  if (cloudVaultUrl) {
+    cloudVault.checkedAt = new Date().toISOString();
+    try {
+      const response = await fetch(`${cloudVaultUrl}/api/health`, {
+        method: 'GET',
+        headers: cloudVaultToken ? { Authorization: `Bearer ${cloudVaultToken}` } : {},
+        signal: AbortSignal.timeout(5000)
+      });
+      cloudVault.reachable = response.ok;
+      cloudVault.message = response.ok
+        ? 'Cloud Vault health endpoint responded successfully.'
+        : `Cloud Vault health endpoint returned HTTP ${response.status}.`;
+    } catch (error) {
+      cloudVault.reachable = false;
+      cloudVault.message = error instanceof Error ? error.message : 'Cloud Vault health probe failed.';
+    }
+  }
+
+  const everpureConfigured = Boolean(everpureUrl && everpureToken);
+  res.json({
+    cloudVault,
+    everpure: {
+      configured: everpureConfigured,
+      reachable: null,
+      message: everpureConfigured
+        ? 'Endpoint and token are present. Live API compatibility has not been verified; confirm the supported Everpure product API and permissions before enabling operations.'
+        : 'Optional adapter not configured. Do not add credentials until the exact Everpure product/API and access method are confirmed.'
+    },
+    policyEngine: {
+      mode: 'metadata-only-preview',
+      message: 'Policy catalogue is currently a design layer; no storage movement, retention change or deletion is performed.'
+    },
+    checkedAt: new Date().toISOString()
+  });
+});
+
 // Vite Middleware for Full-Stack Applet
 async function startServer() {
   const isProd = process.env.NODE_ENV === 'production';
