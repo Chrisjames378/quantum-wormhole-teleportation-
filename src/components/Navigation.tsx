@@ -13,10 +13,11 @@ import {
   TrendingUp,
   Cpu,
   Volume2,
-  VolumeX
+  VolumeX,
+  Cloud
 } from 'lucide-react';
 
-export type ActiveTab = 'sim' | 'three3d' | 'benchmark' | 'circuits' | 'hardware' | 'ai' | 'theory';
+export type ActiveTab = 'sim' | 'three3d' | 'benchmark' | 'circuits' | 'hardware' | 'ai' | 'theory' | 'dataCloud';
 import { SimulationTrial } from '../types/quantum';
 import { quantumAudio } from '../utils/quantumAudio';
 
@@ -35,6 +36,7 @@ export const NAV_TABS: NavTabItem[] = [
   { id: 'hardware', label: 'Hardware', shortLabel: 'QPU', badge: 'Apparatus' },
   { id: 'ai', label: 'AI Sentinel', shortLabel: 'AI', badge: 'Live' },
   { id: 'theory', label: 'Theory', shortLabel: 'Theory', badge: 'Proofs' },
+  { id: 'dataCloud', label: 'Data Cloud', shortLabel: 'Data', badge: 'EDC' },
 ];
 
 interface Props {
