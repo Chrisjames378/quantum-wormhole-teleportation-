@@ -90,7 +90,8 @@ Guidelines for your answers:
  * reports whether an endpoint/token pair has been configured.
  */
 app.get('/api/data-cloud/status', async (_req, res) => {
-  const cloudVaultUrl = process.env.CLOUD_VAULT_URL?.trim().replace((value) => value.endsWith('/') ? value.slice(0, -1) : value);
+  const cloudVaultRaw = process.env.CLOUD_VAULT_URL?.trim();
+  const cloudVaultUrl = cloudVaultRaw?.endsWith('/') ? cloudVaultRaw.slice(0, -1) : cloudVaultRaw;
   const cloudVaultToken = process.env.CLOUD_VAULT_APP_TOKEN;
   const everpureUrl = process.env.EVERPURE_API_BASE_URL?.trim();
   const everpureToken = process.env.EVERPURE_API_TOKEN;
